@@ -1,0 +1,4843 @@
+openapi: 3.0.1
+info:
+  title: "API 1С:SPA-Салон, редакция 3.0"
+  description: "Документация API для 1С:SPA-Салон, редакция 3.0"
+  version: ""
+servers:
+- url: http://cloud.salon1c.ru/api/
+tags:
+- name: Авторизация
+- name: Запись на визит
+- name: Визиты
+- name: Оплата визитов
+- name: Клиенты
+- name: Оценки и комментарии клиентов
+- name: Онлайн-магазин
+- name: Терминал самообслуживания
+- name: Дополнительная информация
+  description: "## Коды ошибок\n\nМогут возвращаться следующие коды ошибок:\n\n| К\
+    од  | Описание                                                              |\n\
+    | ---- | ---------------------------------------------------------------------\
+    \ |\n| 1000 | Ошибка работы с базой данных                                   \
+    \       |\n| 1001 | Информация о клиенте не обновлена                        \
+    \             |\n| .... |                                                    \
+    \                   |\n| 1012 | Не указано id транзакции                     \
+    \                         |\n| 1013 | Не указана сумма пополнения счета      \
+    \                               |\n| 1014 | Не указан эквайринговый терминал о\
+    платы                               |\n| 1015 | Обнаружено дублирования id тра\
+    нзакции                                 |\n| 1016 | Прерывание транзакции, при\
+    \ пополнении лицевого счета                  |\n| .... |                     \
+    \                                                  |\n| 1040 | Не найден метод\
+    \                                                       |\n| 1050 | Не найден\
+    \ сотрудник                                                   |\n| 1051 | Не н\
+    айдена услуга                                                     |\n| 1052 |\
+    \ Не задан временной интервал                                           |\n| 1053\
+    \ | Для клиента установлен запрет онлайн-записи                           |\n\
+    | 1054 | Неверный формат даты                                                \
+    \  |\n| 1055 | Не найден салон                                               \
+    \        |\n| 1056 | Не найден визит                                         \
+    \              |\n| 1057 | Не выбрана кассовая смена                         \
+    \                    |\n| 1058 | Не найдена кассовая смена                   \
+    \                          |\n| 1059 | Не задан номер чека                   \
+    \                                |\n| 1060 | Неверная структура массива оплат\
+    \                                      |\n| 1061 | Не указано время начала виз\
+    ита                                        |\n| 1062 | Не указан ключ авториза\
+    ции                                            |\n| 1063 | Неверный ключ автор\
+    изации                                             |\n| 1064 | Неверный код по\
+    дтверждения                                            |\n| 1065 | Не указан л\
+    огин                                                       |\n| 1066 | Не указ\
+    ан ключ клиента                                                |\n| 1067 | Нев\
+    ерный ключ клиента                                                 |\n| 1068 |\
+    \ Код подтверждения не действителен                                     |\n| 1069\
+    \ | Неверный Email                                                        |\n\
+    | 1070 | Неверное время настройки напоминания о занятии                      \
+    \  |\n| 1071 | Не задан массив записи                                        \
+    \        |\n| 1072 | Неверный параметр rating                                \
+    \              |\n| 1073 | Неверный формат параметра page                    \
+    \                    |\n| 1074 | Неверный формат параметра count             \
+    \                          |\n| 1075 | Неверный формат длительности записи   \
+    \                                |\n| 1076 | Не верно указан(ы) входной(ые) па\
+    раметр(ы)                            |\n| 1077 | Неверный формат параметра master_ids\
+    \                                  |\n| 1078 | Неверный формат параметра visit_ids\
+    \                                   |\n| 1079 | Передана неверная оценка визит\
+    а                                       |\n| 1080 | Не найдено сотрудников, сп\
+    особных оказать переданный массив услуг     |\n| .... |                      \
+    \                                                 |\n| 1100 | Сотрудник не ока\
+    зывает выбранную услугу                               |\n| 1101 | Сотрудник не\
+    \ может оказать услугу в выбранное время                   |      \n| 1102 | С\
+    отрудник не работает в указанное время                               |\n| 1103\
+    \ | Сотрудник недоступен для онлайн-записи                                |\n\
+    | 1104 | Услуга недоступна для онлайн-записи                                 \
+    \  |\n| 1105 | Невозможно перенести выбранный визит на указанное время       \
+    \        |\n| 1106 | Услуга недоступна для онлайн-записи в выбранной структурн\
+    ой единице   |\n| 1107 | Визит не является долговым                          \
+    \                  |\n| 1108 | Клиент не имеет доступ к визитам другово клиент\
+    а                      |\n| 1109 | Визит недоступен для изменения            \
+    \                            |\n| 1110 | Ошибка при отправке SMS с кодом подтв\
+    ерждения                         |\n| 1111 | Остатка на лицевом счете клиента\
+    \ недостаточно для оплаты              |\n| 1112 | Не удалось обновить информа\
+    цию о клиенте                              |\n| 1113 | Визит недоступен для от\
+    мены                                           |\n| 1114 | Массив переданных у\
+    слуг нельзя оказывать одновременно                 |"
+paths:
+  /hs/api/v1/auth_types/{salon_id}/:
+    get:
+      tags:
+      - Авторизация
+      summary: Получить доступные варианты авторизации
+      operationId: Получить доступные варианты авторизации
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона.
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: array
+                    items:
+                      required:
+                      - title
+                      - type
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        title:
+                          type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                  - type: sms
+                    title: СМС
+                  - type: whats_app
+                    title: WhatsApp
+                  - type: email
+                    title: Email
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                - type: sms
+                  title: СМС
+                - type: whats_app
+                  title: WhatsApp
+                - type: email
+                  title: Email
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/auth/{salon_id}/:
+    post:
+      tags:
+      - Авторизация
+      summary: Авторизоваться
+      operationId: Авторизоваться
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона.
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - login
+              type: object
+              properties:
+                login:
+                  type: string
+                  description: Номер телефона клиента. Номер телефона должен передаваться
+                    в формате 79876543210
+                confirmation_code:
+                  type: string
+                  description: Код подтверждения
+                name:
+                  type: string
+                  description: Имя клиента
+                last_name:
+                  type: string
+                  description: Фамилия клиента
+                second_name:
+                  type: string
+                  description: Отчество клиента
+                birthday:
+                  type: string
+                  description: "Дата рождения в формате: \"31.12.1990\"."
+                email:
+                  type: string
+                  description: Электронная почта клиента
+                auth_type:
+                  type: string
+                  description: Выбранный тип авторизации. По умолчанию тип авторизации
+                    - sms.
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      UserToken:
+                        type: string
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                example:
+                  Parameters:
+                    UserToken: 9323751AAB5A5925142F352BBA7913B3
+                  Errors:
+                    code: 0
+              example:
+                Parameters:
+                  UserToken: 9323751AAB5A5925142F352BBA7913B3
+                Errors:
+                  code: 0
+                  message: null
+      x-codegen-request-body-name: body
+  /hs/api/v1/validity_usertoken/{salon_id}/:
+    post:
+      tags:
+      - Авторизация
+      summary: Валидность ключа пользователя
+      operationId: Валидность ключа пользователя
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона. Можно передавать ID любого салона. На авторизацию
+          это не влияет
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 5dff0370-ffd9-453c-b116-f09f405f0603
+        schema:
+          type: string
+        example: 5dff0370-ffd9-453c-b116-f09f405f0603
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Result:
+                    type: boolean
+                example:
+                  Result: false
+              example:
+                Result: false
+  /hs/api/v1/private_auth/{salon_id}/:
+    post:
+      tags:
+      - Авторизация
+      summary: Авторизоваться
+      operationId: Авторизоваться
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона. Можно передавать ID любого салона. На авторизацию
+          это не влияет
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - sign
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Имя клиента
+                second_name:
+                  type: string
+                  description: Отчество клиента
+                last_name:
+                  type: string
+                  description: Фамилия клиента
+                phone:
+                  type: string
+                  description: Телефон клиента
+                email:
+                  type: string
+                  description: Email клиента
+                sex:
+                  type: string
+                  description: "Пол клиента (1 - мужской, 2 - женский)"
+                birthday:
+                  type: string
+                  description: Дата рождения в формате "31.12.1990"
+                sign:
+                  type: string
+                  description: Цифровая подпись
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      UserToken:
+                        type: string
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                example:
+                  Parameters:
+                    UserToken: 9323751AAB5A5925142F352BBA7913B3
+                  Errors:
+                    code: 0
+              example:
+                Parameters:
+                  UserToken: 9323751AAB5A5925142F352BBA7913B3
+                Errors:
+                  code: 0
+                  message: null
+      x-codegen-request-body-name: body
+  /hs/api/v1/auth_request/{salon_id}:
+    post:
+      tags:
+      - Авторизация
+      summary: Подтверждение номера телефона
+      operationId: Подтверждение номера телефона
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона.
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 110132e6-ba129-4120-ac33-fcd612380121
+        schema:
+          type: string
+        example: 110132e6-ba129-4120-ac33-fcd612380121
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - phone
+              type: object
+              properties:
+                request_id:
+                  type: string
+                  description: Идентификатор запроса.
+                  example: 27dd2f8e-32a4-11ee-b18f-f02f7488d897
+                phone:
+                  type: string
+                  description: Номер телефона клиента. Должен передаваться в формате
+                  example: "79876543210"
+                method:
+                  type: string
+                  description: Способ получения кода подтверждения. см. метод "Доступные
+                    способы авторизации"
+                  example: '"outgoing_telegram"'
+                name:
+                  type: string
+                  description: Имя клиента
+                last_name:
+                  type: string
+                  description: Фамилия клиента
+                second_name:
+                  type: string
+                  description: Отчество клиента
+                birthday:
+                  type: string
+                  description: 'Дата рождения в формате:'
+                  example: 31.12.1990
+                email:
+                  type: string
+                  description: Электронная почта клиента
+                  example: test@mail.ru
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      outgoing_id:
+                        type: string
+                      link:
+                        type: string
+                      request_id:
+                        type: string
+                      method:
+                        type: string
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  Parameters:
+                    outgoing_id: you_can_login_bot
+                    link: https://t.me/you_can_login_bot/?start=Verification
+                    request_id: 27dd2f8e-32a4-11ee-b18f-f02f7488d897
+                    method: outgoing_telegram
+                  Errors:
+                    code: 0
+                    message: ""
+              example:
+                Parameters:
+                  outgoing_id: you_can_login_bot
+                  link: https://t.me/you_can_login_bot/?start=Verification
+                  request_id: 27dd2f8e-32a4-11ee-b18f-f02f7488d897
+                  method: outgoing_telegram
+                Errors:
+                  code: 0
+                  message: ""
+      x-codegen-request-body-name: body
+  /hs/api/v1/auth_token/{salon_id}:
+    post:
+      tags:
+      - Авторизация
+      summary: Подтверждение номера телефона
+      operationId: Подтверждение номера телефона
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона.
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 110132e6-ba129-4120-ac33-fcd612380121
+        schema:
+          type: string
+        example: 110132e6-ba129-4120-ac33-fcd612380121
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - request_id
+              type: object
+              properties:
+                request_id:
+                  type: string
+                  description: Идентификатор запроса.
+                  example: 27dd2f8e-32a4-11ee-b18f-f02f7488d897
+                phone:
+                  type: string
+                  description: Номер телефона клиента. Должен передаваться в формате
+                  example: "79876543210"
+                method:
+                  type: string
+                  description: Способ получения кода подтверждения. см. метод "Доступные
+                    способы авторизации"
+                  example: '"outgoing_telegram"'
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      UserToken:
+                        type: string
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  Parameters:
+                    UserToken: F2DD60B2BB446F0327CEB37153C8CC5F
+                  Errors:
+                    code: 0
+                    message: ""
+              example:
+                Parameters:
+                  UserToken: F2DD60B2BB446F0327CEB37153C8CC5F
+                Errors:
+                  code: 0
+                  message: ""
+      x-codegen-request-body-name: body
+  /hs/api/v1/book_services/{salon_id}/:
+    get:
+      tags:
+      - Запись на визит
+      summary: Получить список доступных для бронирования услуг
+      operationId: Получить список доступных для бронирования услуг
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: staff_id
+        in: query
+        description: ID мастера
+        schema:
+          type: string
+      - name: datetime
+        in: query
+        description: Дата (в формате iso8601)
+        schema:
+          type: string
+        example: 20170820T0000
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                        category:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            title:
+                              type: string
+                        price_min:
+                          type: number
+                        price_max:
+                          type: number
+                        comment:
+                          type: string
+                        active:
+                          type: boolean
+                        length:
+                          type: number
+                        ServicesAtSameTime:
+                          type: array
+                          items:
+                            type: string
+                        sort_index:
+                          type: number
+                example:
+                  Parameters:
+                  - id: 140df5b4-5a58-11e7-82e7-0050568b5c8d
+                    title: Мезотерапия
+                    category:
+                      id: 6ceedce5-666a-11e9-899f-2c4d546557dd
+                      title: Косметология
+                    price_min: 1100
+                    price_max: 1100
+                    comment: ""
+                    active: true
+                    length: 60
+                    ServicesAtSameTime:
+                    - e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                    - d8329477-5a5a-11e7-82e7-0050568b5c8d
+                    - 0c599e34-5b0d-11e7-82e7-0050568b5c8d
+                    - 7a4b2cdc-5b0d-11e7-82e7-0050568b5c8d
+                    - af41caf5-5b0d-11e7-82e7-0050568b5c8d
+                    - bd9d179c-5b0d-11e7-82e7-0050568b5c8d
+                    sort_index: 0
+              example:
+                Parameters:
+                - id: 140df5b4-5a58-11e7-82e7-0050568b5c8d
+                  title: Мезотерапия
+                  category:
+                    id: 6ceedce5-666a-11e9-899f-2c4d546557dd
+                    title: Косметология
+                  price_min: 1100
+                  price_max: 1100
+                  comment: ""
+                  active: true
+                  length: 60
+                  ServicesAtSameTime:
+                  - e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                  - d8329477-5a5a-11e7-82e7-0050568b5c8d
+                  - 0c599e34-5b0d-11e7-82e7-0050568b5c8d
+                  - 7a4b2cdc-5b0d-11e7-82e7-0050568b5c8d
+                  - af41caf5-5b0d-11e7-82e7-0050568b5c8d
+                  - bd9d179c-5b0d-11e7-82e7-0050568b5c8d
+                  sort_index: 0
+  /hs/api/v1/book_staff/{salon_id}/:
+    get:
+      tags:
+      - Запись на визит
+      summary: Получить список доступных для записи сотрудников
+      operationId: Получить список доступных для записи сотрудников
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: service_id
+        in: query
+        description: ID услуги
+        schema:
+          type: string
+      - name: service_ids
+        in: query
+        description: "Строка Json с массивом идентификаторов услуг, которые сотруд\
+          ник должен оказать последовательно.\nПример такой строки:  \n{\"services_array\"\
+          :[\"140df5b4-5a58-11e7-82e7-0050568b5c8d\",\"d8329477-5a5a-11e7-82e7-0050568b5c8d\"\
+          ]}\nЕсли по этому массиву не найдено сотрудников, то будет возвращена ош\
+          ибка с кодом 1080.\n"
+        schema:
+          type: string
+      - name: datetime
+        in: query
+        description: Дата в формате iso8601
+        schema:
+          type: string
+        example: 20170820T0000
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      responses:
+        "200":
+          description: OK
+          content: {}
+  /hs/api/v1/book_dates/{salon_id}/:
+    get:
+      tags:
+      - Запись на визит
+      summary: Получить список доступных для записи дат
+      operationId: Получить список доступных для записи дат
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: start_date
+        in: query
+        description: Дата в формате iso8601. Начало периода. Автоматически берется
+          начало дня
+        required: true
+        schema:
+          type: string
+        example: 20170820T0000
+      - name: end_date
+        in: query
+        description: Дата в формате iso8601. Конец периода. Автоматически берется
+          конец дня
+        required: true
+        schema:
+          type: string
+        example: 20170831T0000
+      - name: service_id
+        in: query
+        description: ID услуги
+        schema:
+          type: string
+      - name: staff_id
+        in: query
+        description: ID сотрудника
+        schema:
+          type: string
+      - name: service_ids
+        in: query
+        description: "Строка Json с массивом идентификаторов услуг, которые нужно\
+          \ оказать одновременно.\nПример такой строки:  \n{\"services_array\":[\"\
+          140df5b4-5a58-11e7-82e7-0050568b5c8d\",\"d8329477-5a5a-11e7-82e7-0050568b5c8d\"\
+          ]}\n"
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: array
+                    items:
+                      type: string
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                example:
+                  Parameters:
+                  - 2017-08-20T00:00:00
+                  - 2017-08-21T00:00:00
+                  - 2017-08-22T00:00:00
+                  - 2017-08-23T00:00:00
+                  - 2017-08-24T00:00:00
+                  - 2017-08-25T00:00:00
+                  - 2017-08-30T00:00:00
+                  - 2017-08-31T00:00:00
+                  Errors:
+                    code: 0
+              example:
+                Parameters:
+                - 2017-08-20T00:00:00
+                - 2017-08-21T00:00:00
+                - 2017-08-22T00:00:00
+                - 2017-08-23T00:00:00
+                - 2017-08-24T00:00:00
+                - 2017-08-25T00:00:00
+                - 2017-08-30T00:00:00
+                - 2017-08-31T00:00:00
+                Errors:
+                  code: 0
+                  message: null
+  /hs/api/v1/book_times/{salon_id}/:
+    get:
+      tags:
+      - Запись на визит
+      summary: Получить список слотов доступных для записи
+      operationId: Получить список слотов доступных для записи
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: service_id
+        in: query
+        description: ID услуги
+        schema:
+          type: string
+      - name: staff_id
+        in: query
+        description: ID сотрудника
+        schema:
+          type: string
+      - name: datetime
+        in: query
+        description: "Дата в формате iso8601. Если параметр не заполнен, используе\
+          тся текущая дата сеанса"
+        schema:
+          type: string
+        example: 20170824T0900
+      - name: service_ids
+        in: query
+        description: "Строка Json с массивом идентификаторов услуг, которые нужно\
+          \ оказать одновременно.\nПример такой строки:  \n{\"services_array\":[\"\
+          140df5b4-5a58-11e7-82e7-0050568b5c8d\",\"d8329477-5a5a-11e7-82e7-0050568b5c8d\"\
+          ]}\n"
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: array
+                    items:
+                      required:
+                      - datetime
+                      - seance_length
+                      - time
+                      type: object
+                      properties:
+                        time:
+                          type: string
+                        seance_length:
+                          type: number
+                        datetime:
+                          type: string
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                example:
+                  Parameters:
+                  - time: 09:00
+                    seance_length: 30
+                    datetime: 2017-08-24T09:00:00
+                  - time: 09:30
+                    seance_length: 30
+                    datetime: 2017-08-24T09:30:00
+                  - time: 10:00
+                    seance_length: 30
+                    datetime: 2017-08-24T10:00:00
+                  - time: 15:00
+                    seance_length: 30
+                    datetime: 2017-08-24T15:00:00
+                  - time: 17:00
+                    seance_length: 30
+                    datetime: 2017-08-24T17:00:00
+                  - time: 17:30
+                    seance_length: 30
+                    datetime: 2017-08-24T17:30:00
+                  Errors:
+                    code: 0
+              example:
+                Parameters:
+                - time: 09:00
+                  seance_length: 30
+                  datetime: 2017-08-24T09:00:00
+                - time: 09:30
+                  seance_length: 30
+                  datetime: 2017-08-24T09:30:00
+                - time: 10:00
+                  seance_length: 30
+                  datetime: 2017-08-24T10:00:00
+                - time: 15:00
+                  seance_length: 30
+                  datetime: 2017-08-24T15:00:00
+                - time: 17:00
+                  seance_length: 30
+                  datetime: 2017-08-24T17:00:00
+                - time: 17:30
+                  seance_length: 30
+                  datetime: 2017-08-24T17:30:00
+                Errors:
+                  code: 0
+                  message: null
+  /hs/api/v1/book_record/{salon_id}/:
+    post:
+      tags:
+      - Запись на визит
+      summary: Запись на визит
+      operationId: Запись на визит
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона.
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                record_array:
+                  $ref: '#/components/schemas/Record'
+                fullname:
+                  type: string
+                  description: "Фамилия, имя, отчество клиента, разделенные пробел\
+                    ами. Если передан данный параметр, то игнорируются параметры name,\
+                    \ last_name и second_name"
+                name:
+                  type: string
+                  description: Имя клиента
+                last_name:
+                  type: string
+                  description: Фамилия клиента
+                second_name:
+                  type: string
+                  description: Отчество клиента
+                birthday:
+                  type: string
+                  description: "Дата рождения в формате: \"31.12.1990\"."
+                email:
+                  type: string
+                  description: Адрес электронной почты клиента
+                notify_by_sms:
+                  type: number
+                  description: Время до напоминания о записи в часах
+                comment:
+                  type: string
+                  description: Комментарий к визиту
+                commercial:
+                  type: string
+                  description: Рекламный источник
+                record_id:
+                  type: string
+                  description: "Идентификатор занятия. Если передан, то остальные\
+                    \ параметры передавать не нужно"
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      Result:
+                        type: boolean
+                example:
+                  Parameters:
+                    Result: true
+              example:
+                Parameters:
+                  Result: true
+                Errors: null
+      x-codegen-request-body-name: body
+  /hs/api/v1/change_record/{salon_id}/:
+    put:
+      tags:
+      - Запись на визит
+      summary: Перенести визит
+      operationId: Перенести визит
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: datetime
+        in: query
+        description: Дата в формате iso8601. Новая дата и время визита
+        required: true
+        schema:
+          type: string
+        example: 20170820T1030
+      - name: record_id
+        in: query
+        description: ID визита
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      Result:
+                        type: boolean
+                example:
+                  Parameters:
+                    Result: true
+              example:
+                Parameters:
+                  Result: true
+                Errors: null
+  /hs/api/v1/cancel_record/{salon_id}/:
+    delete:
+      tags:
+      - Запись на визит
+      summary: Отменить запись
+      operationId: Отменить запись
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: record_id
+        in: query
+        description: ID визита
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      Result:
+                        type: boolean
+                example:
+                  Parameters:
+                    Result: true
+              example:
+                Parameters:
+                  Result: true
+                Errors: null
+  /hs/api/v1/finished_visites/{salon_id}/:
+    get:
+      tags:
+      - Визиты
+      summary: Получить список оконченных визитов
+      operationId: Получить список оконченных визитов
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: start_date
+        in: query
+        description: Начало периода в формате iso8601. Автоматически берется начало
+          дня
+        schema:
+          type: string
+      - name: end_date
+        in: query
+        description: Конец периода в формате iso8601. Автоматически берется конец
+          дня
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        actual_start_date:
+                          type: string
+                        actual_end_date:
+                          type: string
+                        services:
+                          type: array
+                          items:
+                            required:
+                            - end_date
+                            - service
+                            - staff
+                            - start_date
+                            type: object
+                            properties:
+                              start_date:
+                                type: string
+                              end_date:
+                                type: string
+                              service:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  title:
+                                    type: string
+                              staff:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  title:
+                                    type: string
+                        client:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            phones:
+                              type: array
+                              items:
+                                type: string
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  Parameters:
+                  - id: 2aa25425-e4f9-11e9-89ab-2c4d546557dd
+                    actual_start_date: 2019-10-15T14:00:00
+                    actual_end_date: 2019-10-15T14:48:40
+                    services:
+                    - start_date: 2019-10-02T12:00:00
+                      end_date: 2019-10-02T12:40:00
+                      service:
+                        id: 0c599e34-5b0d-11e7-82e7-0050568b5c8d
+                        title: Воздушно-вихревой массаж
+                      staff:
+                        id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                        title: Ипритова Инга Юрьевна
+                    - start_date: 2019-10-02T12:40:00
+                      end_date: 2019-10-02T12:40:00
+                      service:
+                        id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                        title: Гидромассаж
+                      staff:
+                        id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                        title: Ипритова Инга Юрьевна
+                    client:
+                      id: eac3bbca-6003-11e7-82e7-0050568b5c8d
+                      name: Веселова Алина Ивановна
+                      phones:
+                      - +7 (999) 8452010
+                  Errors:
+                    code: 0
+                    message: ""
+              example:
+                Parameters:
+                - id: 2aa25425-e4f9-11e9-89ab-2c4d546557dd
+                  actual_start_date: 2019-10-15T14:00:00
+                  actual_end_date: 2019-10-15T14:48:40
+                  services:
+                  - start_date: 2019-10-02T12:00:00
+                    end_date: 2019-10-02T12:40:00
+                    service:
+                      id: 0c599e34-5b0d-11e7-82e7-0050568b5c8d
+                      title: Воздушно-вихревой массаж
+                    staff:
+                      id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                      title: Ипритова Инга Юрьевна
+                  - start_date: 2019-10-02T12:40:00
+                    end_date: 2019-10-02T12:40:00
+                    service:
+                      id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                      title: Гидромассаж
+                    staff:
+                      id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                      title: Ипритова Инга Юрьевна
+                  client:
+                    id: eac3bbca-6003-11e7-82e7-0050568b5c8d
+                    name: Веселова Алина Ивановна
+                    phones:
+                    - +7 (999) 8452010
+                Errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/visites/{salon_id}/:
+    get:
+      tags:
+      - Визиты
+      summary: Получить список оконченных визитов
+      operationId: Получить список оконченных визитов
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: start_date
+        in: query
+        description: Начало периода в формате iso8601. Автоматически берется начало
+          дня
+        schema:
+          type: string
+      - name: end_date
+        in: query
+        description: Конец периода в формате iso8601. Автоматически берется конец
+          дня
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        status:
+                          type: string
+                        actual_start_date:
+                          type: string
+                        actual_end_date:
+                          type: string
+                        services:
+                          type: array
+                          items:
+                            required:
+                            - end_date
+                            - service
+                            - staff
+                            - start_date
+                            type: object
+                            properties:
+                              start_date:
+                                type: string
+                              end_date:
+                                type: string
+                              service:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  title:
+                                    type: string
+                              staff:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  title:
+                                    type: string
+                        client:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            phones:
+                              type: array
+                              items:
+                                type: string
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  Parameters:
+                  - id: 2aa25425-e4f9-11e9-89ab-2c4d546557dd
+                    status: Finished
+                    actual_start_date: 2019-10-15T14:00:00
+                    actual_end_date: 2019-10-15T14:48:40
+                    services:
+                    - start_date: 2019-10-02T12:00:00
+                      end_date: 2019-10-02T12:40:00
+                      service:
+                        id: 0c599e34-5b0d-11e7-82e7-0050568b5c8d
+                        title: Воздушно-вихревой массаж
+                      staff:
+                        id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                        title: Ипритова Инга Юрьевна
+                    - start_date: 2019-10-02T12:40:00
+                      end_date: 2019-10-02T12:40:00
+                      service:
+                        id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                        title: Гидромассаж
+                      staff:
+                        id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                        title: Ипритова Инга Юрьевна
+                    client:
+                      id: eac3bbca-6003-11e7-82e7-0050568b5c8d
+                      name: Веселова Алина Ивановна
+                      phones:
+                      - +7 (999) 8452010
+                  Errors:
+                    code: 0
+                    message: ""
+              example:
+                Parameters:
+                - id: 2aa25425-e4f9-11e9-89ab-2c4d546557dd
+                  status: Finished
+                  actual_start_date: 2019-10-15T14:00:00
+                  actual_end_date: 2019-10-15T14:48:40
+                  services:
+                  - start_date: 2019-10-02T12:00:00
+                    end_date: 2019-10-02T12:40:00
+                    service:
+                      id: 0c599e34-5b0d-11e7-82e7-0050568b5c8d
+                      title: Воздушно-вихревой массаж
+                    staff:
+                      id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                      title: Ипритова Инга Юрьевна
+                  - start_date: 2019-10-02T12:40:00
+                    end_date: 2019-10-02T12:40:00
+                    service:
+                      id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                      title: Гидромассаж
+                    staff:
+                      id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                      title: Ипритова Инга Юрьевна
+                  client:
+                    id: eac3bbca-6003-11e7-82e7-0050568b5c8d
+                    name: Веселова Алина Ивановна
+                    phones:
+                    - +7 (999) 8452010
+                Errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/debt_visits/{salon_id}:
+    get:
+      tags:
+      - Оплата визитов
+      summary: Получить список долговых визитов
+      operationId: Получить список долговых визитов
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Id:
+                          type: string
+                        Customer:
+                          type: object
+                          properties:
+                            Name:
+                              type: string
+                            Phone:
+                              type: string
+                        Organization:
+                          type: object
+                          properties:
+                            TaxationSystem:
+                              type: string
+                        Services:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              Name:
+                                type: string
+                              Quantity:
+                                type: number
+                              Price:
+                                type: number
+                              PriceWithDiscount:
+                                type: number
+                              DiscountSum:
+                                type: number
+                              TaxSum:
+                                type: number
+                              Staff:
+                                type: string
+                              Sum:
+                                type: number
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                example:
+                  Parameters:
+                  - Id: e162eaea-ad88-11e7-8672-2c4d546557dd
+                    Customer:
+                      Name: Одношевич Евгений
+                      Phone: "79876543210"
+                    Organization:
+                      TaxationSystem: Общая система налогообложения
+                    Services:
+                    - Name: Стрижка мужская
+                      Quantity: 1
+                      Price: 500
+                      PriceWithDiscount: 500
+                      DiscountSum: 0
+                      TaxSum: 0
+                      Staff: Новикова Анна
+                      Sum: 500
+                  Errors:
+                    code: 0
+              example:
+                Parameters:
+                - Id: e162eaea-ad88-11e7-8672-2c4d546557dd
+                  CalculationType: null
+                  FiscalCheck: null
+                  Customer:
+                    Name: Одношевич Евгений
+                    Phone: "79876543210"
+                    Email: null
+                  Organization:
+                    TaxationSystemCode: null
+                    TaxationSystem: Общая система налогообложения
+                  Services:
+                  - Name: Стрижка мужская
+                    Quantity: 1
+                    Price: 500
+                    PriceWithDiscount: 500
+                    DiscountSum: 0
+                    Tax: null
+                    TaxSum: 0
+                    Staff: Новикова Анна
+                    Department: null
+                    BarCode: null
+                    CalculationMethod: null
+                    CalculationObject: null
+                    Sum: 500
+                Errors:
+                  code: 0
+                  message: null
+  /hs/api/v1/visit_payment/{salon_id}/:
+    post:
+      tags:
+      - Оплата визитов
+      summary: Оплатить визит
+      operationId: Оплатить визит
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - payment_list
+              - record_id
+              - transaction_id
+              type: object
+              properties:
+                record_id:
+                  type: string
+                  description: ID визита
+                payment_list:
+                  $ref: '#/components/schemas/PaymentList'
+                transaction_id:
+                  type: string
+                  description: Идентификатор транзакции
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      Result:
+                        type: boolean
+                example:
+                  Parameters:
+                    Result: true
+              example:
+                Parameters:
+                  Result: true
+                Errors: null
+      x-codegen-request-body-name: body
+  /hs/api/v1/client/{salon_id}/:
+    get:
+      tags:
+      - Клиенты
+      summary: Получить информацию о клиенте
+      operationId: Получить информацию о клиенте
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      full_name:
+                        type: string
+                      name:
+                        type: string
+                      second_name:
+                        type: string
+                      last_name:
+                        type: string
+                      birthday:
+                        type: string
+                      email:
+                        type: array
+                        items:
+                          type: string
+                      cards:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            title:
+                              type: string
+                            card_code:
+                              type: string
+                            card_type:
+                              type: string
+                            link:
+                              type: string
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                example:
+                  Parameters:
+                    full_name: Коренина Анна
+                    name: Анна
+                    second_name: ""
+                    last_name: Коренина
+                    birthday: 31.12.1990
+                    email:
+                    - Anna172@mail.ru
+                    - AnnaKorenina@mail.ru
+                    cards:
+                    - id: 523d8557-c5b5-11ea-89d3-2c4d546557dd
+                      title: Карта №5902047170294
+                      card_code: "5902047170294"
+                      card_type: barcode
+                      link: ""
+                  Errors:
+                    code: 0
+              example:
+                Parameters:
+                  full_name: Коренина Анна
+                  name: Анна
+                  second_name: ""
+                  last_name: Коренина
+                  birthday: 31.12.1990
+                  sex: null
+                  email:
+                  - Anna172@mail.ru
+                  - AnnaKorenina@mail.ru
+                  cards:
+                  - id: 523d8557-c5b5-11ea-89d3-2c4d546557dd
+                    title: Карта №5902047170294
+                    card_code: "5902047170294"
+                    card_type: barcode
+                    link: ""
+                Errors:
+                  code: 0
+                  message: null
+  /hs/api/v1/deposit_list/{salon_id}/:
+    get:
+      tags:
+      - Клиенты
+      summary: Получить лицевые и бонусные счета клиента
+      operationId: Получить лицевые и бонусные счета клиента
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: with_advance
+        in: query
+        description: "Если параметр = Истина, то будут возвращены данные по авансо\
+          вому счету."
+        schema:
+          type: boolean
+      - name: apikey
+        in: header
+        description: e.g. 8d4093c3-5ec9-4efe-aaa4-f0316fa1a40f
+        schema:
+          type: string
+        example: 8d4093c3-5ec9-4efe-aaa4-f0316fa1a40f
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: array
+                    items:
+                      required:
+                      - balance
+                      - deposit
+                      type: object
+                      properties:
+                        deposit:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            title:
+                              type: string
+                            deposit_type:
+                              type: string
+                            history_exist:
+                              type: boolean
+                        balance:
+                          type: number
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  Parameters:
+                  - deposit:
+                      id: cced6215-8b97-11e9-89a0-2c4d546557dd
+                      title: Основной
+                      deposit_type: deposit
+                      history_exist: true
+                    balance: 1700
+                  - deposit:
+                      id: ed04bf07-8b97-11e9-89a0-2c4d546557dd
+                      title: Дополнительный
+                      deposit_type: deposit
+                      history_exist: true
+                    balance: 300
+                  - deposit:
+                      id: 142b0943-8b99-11e9-89a0-2c4d546557dd
+                      title: Бонусы
+                      deposit_type: bonus
+                      history_exist: true
+                    balance: 1500
+                  Errors:
+                    code: 0
+                    message: ""
+              example:
+                Parameters:
+                - deposit:
+                    id: cced6215-8b97-11e9-89a0-2c4d546557dd
+                    title: Основной
+                    deposit_type: deposit
+                    history_exist: true
+                  balance: 1700
+                - deposit:
+                    id: ed04bf07-8b97-11e9-89a0-2c4d546557dd
+                    title: Дополнительный
+                    deposit_type: deposit
+                    history_exist: true
+                  balance: 300
+                - deposit:
+                    id: 142b0943-8b99-11e9-89a0-2c4d546557dd
+                    title: Бонусы
+                    deposit_type: bonus
+                    history_exist: true
+                  balance: 1500
+                Errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/update_client/{salon_id}:
+    post:
+      tags:
+      - Клиенты
+      summary: Обновить информацию о клиенте
+      operationId: Обновить информацию о клиенте
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                last_name:
+                  type: string
+                  description: Фамилия
+                name:
+                  type: string
+                  description: Имя
+                second_name:
+                  type: string
+                  description: Отчество
+                birthday:
+                  type: string
+                  description: Дата рождения в формате "31.12.1990"
+                sex:
+                  type: number
+                  description: "Пол клиента (1 - мужской, 2 - женский)"
+                phone:
+                  type: string
+                  description: Номер телефона
+                email:
+                  type: string
+                  description: Адрес электронной почты
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      Result:
+                        type: boolean
+                      data_client:
+                        type: object
+                        properties:
+                          full_name:
+                            type: string
+                          name:
+                            type: string
+                          second_name:
+                            type: string
+                          last_name:
+                            type: string
+                          birthday:
+                            type: string
+                          sex:
+                            type: string
+                          email:
+                            type: array
+                            items:
+                              type: string
+                example:
+                  Parameters:
+                    Result: true
+                    data_client:
+                      full_name: Андреева Анна Сергеевна
+                      name: Анна
+                      second_name: Сергеевна
+                      last_name: Андреева
+                      birthday: 31.12.1990
+                      sex: Женский
+                      email:
+                      - Andreeva1975@mail.ru
+              example:
+                Parameters:
+                  Result: true
+                  data_client:
+                    full_name: Андреева Анна Сергеевна
+                    name: Анна
+                    second_name: Сергеевна
+                    last_name: Андреева
+                    birthday: 31.12.1990
+                    sex: Женский
+                    email:
+                    - Andreeva1975@mail.ru
+                Errors: null
+      x-codegen-request-body-name: body
+  /hs/api/v1/refill_deposit/{salon_id}:
+    post:
+      tags:
+      - Клиенты
+      summary: Пополнить лицевой счет клиента
+      operationId: Пополнить лицевой счет клиента
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - cost
+              - deposit_id
+              - transaction_id
+              type: object
+              properties:
+                transaction_id:
+                  type: string
+                  description: Идентификатор транзакции
+                cost:
+                  type: number
+                  description: Сумма
+                deposit_id:
+                  type: string
+                  description: Идентификатор лицевого счета.
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      Result:
+                        type: boolean
+                example:
+                  Parameters:
+                    Result: true
+              example:
+                Parameters:
+                  Result: true
+                Errors: null
+      x-codegen-request-body-name: body
+  /hs/api/v1/records_history/{salon_id}/:
+    get:
+      tags:
+      - Клиенты
+      summary: Получить историю визитов
+      operationId: Получить историю визитов
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        start_date:
+                          type: string
+                        end_date:
+                          type: string
+                        client:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                        status:
+                          type: string
+                        services:
+                          type: array
+                          items:
+                            required:
+                            - count
+                            - end_date
+                            - service
+                            - staff
+                            - start_date
+                            - sum
+                            type: object
+                            properties:
+                              start_date:
+                                type: string
+                              end_date:
+                                type: string
+                              service:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    type: string
+                              staff:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    type: string
+                              count:
+                                type: number
+                              sum:
+                                type: number
+                        count_total:
+                          type: number
+                        sum_total:
+                          type: number
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  Parameters:
+                  - id: 5ee2827f-8a80-11e8-8963-2c4d546557dd
+                    start_date: 2018-07-18T18:00:00
+                    end_date: 2018-07-18T19:00:00
+                    client:
+                      id: c27e5408-6003-11e7-82e7-0050568b5c8d
+                      name: Баранова Екатерина Сергеевна
+                    status: arrived
+                    services:
+                    - start_date: 2018-07-18T19:00:00
+                      end_date: 2018-07-18T20:00:00
+                      service:
+                        id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                        name: Гидромассаж
+                      staff:
+                        id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                        name: Ипритова Инга Юрьевна
+                      count: 2
+                      sum: 4600
+                    - start_date: 2018-07-18T18:00:00
+                      end_date: 2018-07-18T19:00:00
+                      service:
+                        id: e556fd0c-01a8-11e8-b770-0050568b5c8d
+                        name: Антицеллюлитный массаж
+                      staff:
+                        id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                        name: Ипритова Инга Юрьевна
+                      count: 1
+                      sum: 2000
+                    count_total: 3
+                    sum_total: 6600
+                  Errors:
+                    code: 0
+                    message: ""
+              example:
+                Parameters:
+                - id: 5ee2827f-8a80-11e8-8963-2c4d546557dd
+                  start_date: 2018-07-18T18:00:00
+                  end_date: 2018-07-18T19:00:00
+                  client:
+                    id: c27e5408-6003-11e7-82e7-0050568b5c8d
+                    name: Баранова Екатерина Сергеевна
+                  status: arrived
+                  services:
+                  - start_date: 2018-07-18T19:00:00
+                    end_date: 2018-07-18T20:00:00
+                    service:
+                      id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                      name: Гидромассаж
+                    staff:
+                      id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                      name: Ипритова Инга Юрьевна
+                    count: 2
+                    sum: 4600
+                  - start_date: 2018-07-18T18:00:00
+                    end_date: 2018-07-18T19:00:00
+                    service:
+                      id: e556fd0c-01a8-11e8-b770-0050568b5c8d
+                      name: Антицеллюлитный массаж
+                    staff:
+                      id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                      name: Ипритова Инга Юрьевна
+                    count: 1
+                    sum: 2000
+                  count_total: 3
+                  sum_total: 6600
+                Errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/records/{salon_id}/:
+    get:
+      tags:
+      - Клиенты
+      summary: Получить запланированные визиты клиента
+      operationId: Получить запланированные визиты клиента
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        start_date:
+                          type: string
+                        end_date:
+                          type: string
+                        client:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                        status:
+                          type: string
+                        services:
+                          type: array
+                          items:
+                            required:
+                            - count
+                            - end_date
+                            - service
+                            - staff
+                            - start_date
+                            - sum
+                            type: object
+                            properties:
+                              start_date:
+                                type: string
+                              end_date:
+                                type: string
+                              service:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    type: string
+                              staff:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    type: string
+                              count:
+                                type: number
+                              sum:
+                                type: number
+                        count_total:
+                          type: number
+                        sum_total:
+                          type: number
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  Parameters:
+                  - id: 5ee2827f-8a80-11e8-8963-2c4d546557dd
+                    start_date: 2018-07-18T18:00:00
+                    end_date: 2018-07-18T19:00:00
+                    client:
+                      id: c27e5408-6003-11e7-82e7-0050568b5c8d
+                      name: Баранова Екатерина Сергеевна
+                    status: planned
+                    services:
+                    - start_date: 2018-07-18T19:00:00
+                      end_date: 2018-07-18T20:00:00
+                      service:
+                        id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                        name: Гидромассаж
+                      staff:
+                        id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                        name: Ипритова Инга Юрьевна
+                      count: 2
+                      sum: 4600
+                    - start_date: 2018-07-18T18:00:00
+                      end_date: 2018-07-18T19:00:00
+                      service:
+                        id: e556fd0c-01a8-11e8-b770-0050568b5c8d
+                        name: Антицеллюлитный массаж
+                      staff:
+                        id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                        name: Ипритова Инга Юрьевна
+                      count: 1
+                      sum: 2000
+                    count_total: 3
+                    sum_total: 6600
+                  Errors:
+                    code: 0
+                    message: ""
+              example:
+                Parameters:
+                - id: 5ee2827f-8a80-11e8-8963-2c4d546557dd
+                  start_date: 2018-07-18T18:00:00
+                  end_date: 2018-07-18T19:00:00
+                  client:
+                    id: c27e5408-6003-11e7-82e7-0050568b5c8d
+                    name: Баранова Екатерина Сергеевна
+                  status: planned
+                  services:
+                  - start_date: 2018-07-18T19:00:00
+                    end_date: 2018-07-18T20:00:00
+                    service:
+                      id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                      name: Гидромассаж
+                    staff:
+                      id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                      name: Ипритова Инга Юрьевна
+                    count: 2
+                    sum: 4600
+                  - start_date: 2018-07-18T18:00:00
+                    end_date: 2018-07-18T19:00:00
+                    service:
+                      id: e556fd0c-01a8-11e8-b770-0050568b5c8d
+                      name: Антицеллюлитный массаж
+                    staff:
+                      id: d7d792c2-0571-11e7-a42a-0050568b5c8d
+                      name: Ипритова Инга Юрьевна
+                    count: 1
+                    sum: 2000
+                  count_total: 3
+                  sum_total: 6600
+                Errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/record_rating/{salon_id}:
+    post:
+      tags:
+      - Оценки и комментарии клиентов
+      summary: Установить оценку и комментарий к визиту
+      operationId: Установить оценку и комментарий к визиту
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - comment
+              - rating
+              - record_id
+              - staff_id
+              type: object
+              properties:
+                record_id:
+                  type: string
+                  description: Идентификатор визита.
+                staff_id:
+                  type: string
+                  description: Идентификатор сотрудника.
+                rating:
+                  type: number
+                  description: Оценка визита (число от 0 до 10).
+                comment:
+                  type: number
+                  description: Комментарий к визиту.
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: object
+                    properties:
+                      Result:
+                        type: boolean
+                example:
+                  Parameters:
+                    Result: true
+              example:
+                Parameters:
+                  Result: true
+                Error: null
+      x-codegen-request-body-name: body
+  /hs/api/v1/comments/{salon_id}/:
+    get:
+      tags:
+      - Оценки и комментарии клиентов
+      summary: Получить комментарии по сотруднику
+      operationId: Получить комментарии по сотруднику
+      parameters:
+      - name: salon_id
+        in: path
+        description: ID салона
+        required: true
+        schema:
+          type: string
+      - name: start_date
+        in: query
+        description: Дата в формате iso8601. Начало периода. Автоматически берется
+          начало дня
+        schema:
+          type: string
+      - name: end_date
+        in: query
+        description: Дата в формате iso8601. Конец периода. Автоматически берется
+          конец дня
+        schema:
+          type: string
+      - name: staff_id
+        in: query
+        description: ID сотрудника. (Фильтр по сотруднику)
+        schema:
+          type: string
+      - name: rating
+        in: query
+        description: Оценка. (Фильтр по комментрариям к конкретной оценке)
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      - name: usertoken
+        in: header
+        description: e.g. 256D323401901DB2BD42405FA54509B0
+        schema:
+          type: string
+        example: 256D323401901DB2BD42405FA54509B0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Parameters:
+                    type: array
+                    items:
+                      required:
+                      - client
+                      - date
+                      - ratings
+                      - staff
+                      - text
+                      type: object
+                      properties:
+                        staff:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                        text:
+                          type: string
+                        date:
+                          type: string
+                        ratings:
+                          type: array
+                          items:
+                            required:
+                            - rating
+                            - rating_parameter
+                            type: object
+                            properties:
+                              rating_parameter:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  title:
+                                    type: string
+                              rating:
+                                type: number
+                        client:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                  Errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                example:
+                  Parameters:
+                  - staff:
+                      id: 24ed443d-9a02-11e7-8931-2c4d546557dd
+                      name: Новикова Анна
+                    text: Всё хорошо
+                    date: 2017-11-20T00:00:00
+                    ratings:
+                    - rating_parameter:
+                        id: 50a4f2a5-cdc4-11e7-893b-2c4d546557dd
+                        title: Оценка
+                      rating: 5
+                    - rating_parameter:
+                        id: b1f48dc2-cdc4-11e7-893b-2c4d546557dd
+                        title: Скорость
+                      rating: 4
+                    client:
+                      id: 3d2ef2ef-acce-11e7-8672-2c4d546557dd
+                      name: Анна Каренина
+                  - staff:
+                      id: 24ed443d-9a02-11e7-8931-2c4d546557dd
+                      name: Новикова Анна
+                    text: Херь
+                    date: 2017-11-20T00:00:00
+                    ratings:
+                    - rating_parameter:
+                        id: 50a4f2a5-cdc4-11e7-893b-2c4d546557dd
+                        title: Оценка
+                      rating: 3
+                    client:
+                      id: 3d2ef2ef-acce-11e7-8672-2c4d546557dd
+                      name: Анна Коренина
+                  - text: Всё отлично
+                    date: 2017-11-20T00:00:00
+                    ratings:
+                    - rating_parameter:
+                        id: 50a4f2a5-cdc4-11e7-893b-2c4d546557dd
+                        title: Оценка
+                      rating: 5
+                    client:
+                      id: 90be43e8-bedd-11e7-8939-2c4d546557dd
+                      name: Михайлов
+                  - staff:
+                      id: 24ed443d-9a02-11e7-8931-2c4d546557dd
+                      name: Новикова Анна
+                    text: Плохой сервис
+                    date: 2017-11-20T00:00:00
+                    ratings:
+                    - rating_parameter:
+                        id: 50a4f2a5-cdc4-11e7-893b-2c4d546557dd
+                        title: Оценка
+                      rating: 3
+                    client:
+                      id: e610fba4-06f4-11e7-a942-001d7d5c01d0
+                      name: Антонченко Алина
+                  Errors:
+                    code: 0
+              example:
+                Parameters:
+                - staff:
+                    id: 24ed443d-9a02-11e7-8931-2c4d546557dd
+                    name: Новикова Анна
+                  text: Всё хорошо
+                  date: 2017-11-20T00:00:00
+                  ratings:
+                  - rating_parameter:
+                      id: 50a4f2a5-cdc4-11e7-893b-2c4d546557dd
+                      title: Оценка
+                    rating: 5
+                  - rating_parameter:
+                      id: b1f48dc2-cdc4-11e7-893b-2c4d546557dd
+                      title: Скорость
+                    rating: 4
+                  client:
+                    id: 3d2ef2ef-acce-11e7-8672-2c4d546557dd
+                    name: Анна Каренина
+                - staff:
+                    id: 24ed443d-9a02-11e7-8931-2c4d546557dd
+                    name: Новикова Анна
+                  text: Херь
+                  date: 2017-11-20T00:00:00
+                  ratings:
+                  - rating_parameter:
+                      id: 50a4f2a5-cdc4-11e7-893b-2c4d546557dd
+                      title: Оценка
+                    rating: 3
+                  client:
+                    id: 3d2ef2ef-acce-11e7-8672-2c4d546557dd
+                    name: Анна Коренина
+                - text: Всё отлично
+                  date: 2017-11-20T00:00:00
+                  ratings:
+                  - rating_parameter:
+                      id: 50a4f2a5-cdc4-11e7-893b-2c4d546557dd
+                      title: Оценка
+                    rating: 5
+                  client:
+                    id: 90be43e8-bedd-11e7-8939-2c4d546557dd
+                    name: Михайлов
+                - staff:
+                    id: 24ed443d-9a02-11e7-8931-2c4d546557dd
+                    name: Новикова Анна
+                  text: Плохой сервис
+                  date: 2017-11-20T00:00:00
+                  ratings:
+                  - rating_parameter:
+                      id: 50a4f2a5-cdc4-11e7-893b-2c4d546557dd
+                      title: Оценка
+                    rating: 3
+                  client:
+                    id: e610fba4-06f4-11e7-a942-001d7d5c01d0
+                    name: Антонченко Алина
+                Errors:
+                  code: 0
+                  message: null
+  /hs/api/v1/price_list/{salon_id}/:
+    get:
+      tags:
+      - Онлайн-магазин
+      summary: Получить прайс клиента
+      operationId: Получить прайс клиента
+      parameters:
+      - name: type
+        in: query
+        description: "Тип номенклатуры (\"product\" - товар, \"package\" - пакет у\
+          слуг, \"gift_certificate\" - подарочный сертификат)."
+        schema:
+          type: string
+      - name: product_id
+        in: query
+        description: "\nСтрока Json с массивом строк, содержащим параметры \"product_id\"\
+          \ идентификатор номенклатуры. \nПример такой строки: [\"9ad49672-a043-11e7-ab37-000c2938171c\"\
+          , \"8bac3895-9e13-11e7-9966-0050568bd50c\"]\n"
+        schema:
+          type: string
+      - name: group_id
+        in: query
+        description: Идентификатор группы номенклатур.
+        schema:
+          type: string
+      - name: page_count
+        in: query
+        description: "Количество единиц номенклатуры, которое необходимо получить."
+        schema:
+          type: string
+      - name: page_number
+        in: query
+        description: Номер страницы с которой начинать счет.
+        schema:
+          type: string
+      - name: search_line
+        in: query
+        description: "Строка поиска, должна содержать минимум 3 символа."
+        schema:
+          type: string
+      - name: without_remainder
+        in: query
+        description: "Булевский параметр. Если параметр = Истина, то будут возвращ\
+          ены товары без учета остатка, иначе только товары с остатком больше нуля\
+          . Значение по умолчанию - Ложь."
+        schema:
+          type: boolean
+      - name: with_group
+        in: query
+        description: "Булевский параметр. Если параметр = Истина, то будет возвращ\
+          ен массив групп для товаров. Значение по умолчанию - Ложь."
+        schema:
+          type: boolean
+      - name: filters
+        in: query
+        description: "Строка json, содержащая массив фильтров."
+        schema:
+          type: string
+      - name: code
+        in: query
+        description: Код искомой номенклатуры.
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      - name: usertoken
+        in: header
+        description: e.g. 7e8245d1-574f-4ce8-88ec-7e34358df45
+        schema:
+          type: string
+        example: 7e8245d1-574f-4ce8-88ec-7e34358df45
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      price_client:
+                        type: array
+                        items:
+                          required:
+                          - additional_details
+                          - article
+                          - balance
+                          - category
+                          - id
+                          - pictures
+                          - price
+                          - title
+                          - type
+                          - unit
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            title:
+                              type: string
+                            type:
+                              type: string
+                            category:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                title:
+                                  type: string
+                            price:
+                              type: string
+                            balance:
+                              type: number
+                            pictures:
+                              type: array
+                              items:
+                                type: string
+                            article:
+                              type: string
+                            unit:
+                              type: string
+                            additional_details:
+                              type: array
+                              items:
+                                type: object
+                      navigation:
+                        type: object
+                        properties:
+                          current_page:
+                            type: number
+                          total_page:
+                            type: number
+                          contains_count:
+                            type: number
+                          total_count:
+                            type: number
+                          page_number:
+                            type: number
+                          page_count:
+                            type: number
+                      errors:
+                        type: object
+                        properties:
+                          code:
+                            type: number
+                          message:
+                            type: string
+                example:
+                  parameters:
+                    price_client:
+                    - id: ed6a35d5-e976-11e7-838a-0050568b5c8d
+                      title: Крем для рук
+                      type: product
+                      category:
+                        id: 4614bc05-757f-11ea-89ba-2c4d546557dd
+                        title: Запасы
+                      price: "1000"
+                      balance: 0
+                      pictures: []
+                      article: ""
+                      unit: мл
+                      additional_details: []
+                    - id: 367a2fcd-05be-11e8-b770-0050568b5c8d
+                      title: Крем для тела
+                      type: product
+                      category:
+                        id: 4614bc05-757f-11ea-89ba-2c4d546557dd
+                        title: Запасы
+                      price: "500"
+                      balance: 7
+                      country_origin: БОСНИЯ И ГЕРЦЕГОВИНА
+                      article: ""
+                      unit: шт
+                      additional_details: []
+                      pictures:
+                      - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-b618ef92-c67c-11ea-89d3-2c4d546557dd
+                      - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-de2c2e25-c67d-11ea-89d3-2c4d546557dd
+                    navigation:
+                      current_page: 1
+                      total_page: 1
+                      contains_count: 2
+                      total_count: 2
+                      page_number: 1
+                      page_count: 20
+                    errors:
+                      code: 0
+                      message: ""
+              example:
+                parameters:
+                  price_client:
+                  - id: ed6a35d5-e976-11e7-838a-0050568b5c8d
+                    title: Крем для рук
+                    type: product
+                    category:
+                      id: 4614bc05-757f-11ea-89ba-2c4d546557dd
+                      title: Запасы
+                    price: "1000"
+                    description: null
+                    services: null
+                    validity: null
+                    available_time: null
+                    balance: 0
+                    pictures: []
+                    country_origin: null
+                    article: ""
+                    unit: мл
+                    additional_details: []
+                  - id: 367a2fcd-05be-11e8-b770-0050568b5c8d
+                    title: Крем для тела
+                    type: product
+                    category:
+                      id: 4614bc05-757f-11ea-89ba-2c4d546557dd
+                      title: Запасы
+                    price: "500"
+                    description: null
+                    services: null
+                    validity: null
+                    available_time: null
+                    balance: 7
+                    country_origin: БОСНИЯ И ГЕРЦЕГОВИНА
+                    article: ""
+                    unit: шт
+                    additional_details: []
+                    pictures:
+                    - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-b618ef92-c67c-11ea-89d3-2c4d546557dd
+                    - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-de2c2e25-c67d-11ea-89d3-2c4d546557dd
+                  navigation:
+                    current_page: 1
+                    total_page: 1
+                    contains_count: 2
+                    total_count: 2
+                    page_number: 1
+                    page_count: 20
+                  errors:
+                    code: 0
+                    message: ""
+  /hs/api/v1/cart_cost/{salon_id}/:
+    get:
+      tags:
+      - Онлайн-магазин
+      summary: Получить стоимость корзины
+      operationId: Получить стоимость корзины
+      parameters:
+      - name: cart
+        in: query
+        description: |-
+          Строка json с массивом объектов. Пример такой строки: [{"purchase_id":"9ad49672-a043-11e7-ab37-000c2938171c", "count":2},{"purchase_id":"8bac3895-9e13-11e7-9966-0050568bd50c", "count":1}]
+
+          <ul>
+              <li> purchase_id (required) - Идентификатор номенклатуры </li>
+              <li> count (required) - Количество номенклатуры </li>
+          </ul>
+        required: true
+        schema:
+          type: string
+      - name: delivery
+        in: query
+        description: "Строка json с объектом доставки.\n\n<ul> \n    <li> id (required)\
+          \ - Идентификатор номенклатуры доставки </li>\n    <li> price (required)\
+          \ - Стоимость услуги доставки </li>\n</ul>"
+        schema:
+          type: string
+      - name: cart_pay
+        in: query
+        description: "Строка json с объектом предварительных оплат.\n\n<ul> \n   \
+          \ <li> type (required) - Тип оплаты (\"cash\" - оплата наличными, \"card\"\
+          \ - оплата картой, \"deposit\" - оплата с лицевого счета, \"bonus\" - оп\
+          лата с бонусного счета) </li>\n    <li> amount (required) - Сумма оплаты\
+          \ </li>\n    <li> id (optional) - Идентификатор лицевого счета (необходи\
+          мо передавать только при оплате с лицевого/бонусного счета) </li>\n</ul>"
+        schema:
+          type: string
+      - name: client
+        in: query
+        description: "Строка json с объектом данных клиента.\n\n<ul> \n    <li> phone\
+          \ (optional, string) - Телефон клиента. Необходим, если в заголовках не\
+          \ передается usertoken </li>\n    <li> last_name (optional, string) - Фа\
+          милия клиента. Требуется, если в заголовках не передается usertoken </li>\n\
+          \    <li> name (optional, string) - Имя клиента. Необходимо, если в заго\
+          ловках не передается usertoken </li>\n    <li> second_name (optional, string)\
+          \ - Отчество клиента. Если в заголовках не передается usertoken, то данн\
+          ый параметр будет добавлен создаваемому клиенту. </li>\n    <li> birthday\
+          \ (optional, string) - Дата рождения в формате: \"31.12.1990\". Если в з\
+          аголовках не передается usertoken, то данный параметр будет добавлен соз\
+          даваемому клиенту. </li>\n</ul>"
+        schema:
+          type: string
+      - name: promocode
+        in: query
+        description: Применяемый промокод.
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      - name: usertoken
+        in: header
+        description: e.g. 7e8245d1-574f-4ce8-88ec-7e34358df45
+        schema:
+          type: string
+        example: 7e8245d1-574f-4ce8-88ec-7e34358df45
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      cart:
+                        type: array
+                        items:
+                          required:
+                          - count
+                          - discount_sum
+                          - payment_amount
+                          - price
+                          - price_type
+                          - price_with_discount
+                          - purchase
+                          type: object
+                          properties:
+                            purchase:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                title:
+                                  type: string
+                                type:
+                                  type: string
+                                description:
+                                  type: string
+                                pictures:
+                                  type: array
+                                  items:
+                                    type: string
+                            count:
+                              type: number
+                            price_type:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                title:
+                                  type: string
+                            price:
+                              type: number
+                            discount_sum:
+                              type: number
+                            price_with_discount:
+                              type: number
+                            payment_amount:
+                              type: number
+                      total_amount:
+                        type: number
+                      total_discount:
+                        type: number
+                      promocode:
+                        type: string
+                      may_be_payment:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            title:
+                              type: string
+                            type:
+                              type: string
+                            payment_amount:
+                              type: number
+                      promotions:
+                        type: array
+                        items:
+                          required:
+                          - amount
+                          - title
+                          - type
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            title:
+                              type: string
+                            amount:
+                              type: number
+                      payment_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            title:
+                              type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                    cart:
+                    - purchase:
+                        id: c85e4472-cc8f-11e8-8973-2c4d546557dd
+                        title: Крем для рук
+                        type: product
+                        description: ""
+                        pictures:
+                        - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-b618ef92-c67c-11ea-89d3-2c4d546557dd
+                        - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-de2c2e25-c67d-11ea-89d3-2c4d546557dd
+                      count: 1
+                      price_type:
+                        id: f4a196f7-772e-11ea-89ba-2c4d546557dd
+                        title: Цена для онлайн-продажи
+                      price: 1900
+                      discount_sum: 95
+                      price_with_discount: 1805
+                      payment_amount: 1805
+                    - purchase:
+                        id: 13fbaafe-107e-11e7-ad3d-0050568b5c8d
+                        title: Шампунь
+                        type: product
+                        description: ""
+                        pictures:
+                        - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-b618ef92-c67c-11ea-89d3-2c4d546557dd
+                        - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-de2c2e25-c67d-11ea-89d3-2c4d546557dd
+                      count: 1
+                      price_type:
+                        id: fa48036e-ef90-11e6-a7df-0050568b5c8d
+                        title: Розничная цена
+                      price: 1000
+                      price_with_discount: 950
+                      discount_sum: 50
+                      payment_amount: 950
+                    total_amount: 950
+                    total_discount: 50
+                    promocode: SX786TZ8L6
+                    may_be_payment:
+                    - id: 83b95983-4813-11ea-89af-2c4d546557dd
+                      title: Бонусы
+                      type: bonus
+                      payment_amount: 950
+                    promotions:
+                    - type: discount
+                      title: Бонус от покупки
+                      amount: 1000
+                    - type: discount
+                      title: Бонус от покупки
+                      amount: 1000
+                    - type: discount
+                      title: Скидка 5% (Всегда)
+                      amount: 50
+                    - type: discount
+                      title: Скидка 5% (Всегда)
+                      amount: 95
+                    payment_types:
+                    - type: cash
+                      title: Наличными
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                  cart:
+                  - purchase:
+                      id: c85e4472-cc8f-11e8-8973-2c4d546557dd
+                      title: Крем для рук
+                      type: product
+                      description: ""
+                      services: null
+                      validity: null
+                      pictures:
+                      - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-b618ef92-c67c-11ea-89d3-2c4d546557dd
+                      - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-de2c2e25-c67d-11ea-89d3-2c4d546557dd
+                    count: 1
+                    price_type:
+                      id: f4a196f7-772e-11ea-89ba-2c4d546557dd
+                      title: Цена для онлайн-продажи
+                    price: 1900
+                    discount_sum: 95
+                    price_with_discount: 1805
+                    payment_amount: 1805
+                  - purchase:
+                      id: 13fbaafe-107e-11e7-ad3d-0050568b5c8d
+                      title: Шампунь
+                      type: product
+                      description: ""
+                      services: null
+                      validity: null
+                      pictures:
+                      - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-b618ef92-c67c-11ea-89d3-2c4d546557dd
+                      - http://localhost/Spa3/hs/api/files/409265d1-a0af-4ce8-88ec-7e3435024bc2/367a2fcd-05be-11e8-b770-0050568b5c8d-de2c2e25-c67d-11ea-89d3-2c4d546557dd
+                    count: 1
+                    price_type:
+                      id: fa48036e-ef90-11e6-a7df-0050568b5c8d
+                      title: Розничная цена
+                    price: 1000
+                    price_with_discount: 950
+                    discount_sum: 50
+                    payment_amount: 950
+                  total_amount: 950
+                  total_discount: 50
+                  gift_to: null
+                  delivery: null
+                  promocode: SX786TZ8L6
+                  may_be_payment:
+                  - id: 83b95983-4813-11ea-89af-2c4d546557dd
+                    title: Бонусы
+                    type: bonus
+                    payment_amount: 950
+                  promotions:
+                  - type: discount
+                    title: Бонус от покупки
+                    amount: 1000
+                  - type: discount
+                    title: Бонус от покупки
+                    amount: 1000
+                  - type: discount
+                    title: Скидка 5% (Всегда)
+                    amount: 50
+                  - type: discount
+                    title: Скидка 5% (Всегда)
+                    amount: 95
+                  payment_types:
+                  - type: cash
+                    title: Наличными
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/payment/{salon_id}:
+    post:
+      tags:
+      - Онлайн-магазин
+      summary: Оплатить покупки
+      operationId: Оплатить покупки
+      parameters:
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      - name: usertoken
+        in: header
+        description: e.g. 7e8245d1-574f-4ce8-88ec-7e34358df45
+        schema:
+          type: string
+        example: 7e8245d1-574f-4ce8-88ec-7e34358df45
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - cart
+              - payment_list
+              - transaction_id
+              type: object
+              properties:
+                transaction_id:
+                  type: string
+                  description: Идентификатор транзакции
+                cart:
+                  $ref: '#/components/schemas/cart'
+                payment_list:
+                  $ref: '#/components/schemas/PaymentList'
+                gift_to:
+                  $ref: '#/components/schemas/GiftTo'
+                comment:
+                  type: string
+                  description: Комментарий к заказу
+                address:
+                  type: string
+                  description: Адрес заказа
+                delivery:
+                  $ref: '#/components/schemas/delivery'
+                promocode:
+                  type: string
+                  description: Промокод
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      result:
+                        type: boolean
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                    result: true
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                  result: true
+                errors:
+                  code: 0
+                  message: ""
+      x-codegen-request-body-name: body
+  /hs/api/v1/group_list/{salon_id}:
+    get:
+      tags:
+      - Онлайн-магазин
+      summary: Получить разделы товаров
+      operationId: Получить разделы товаров
+      parameters:
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: array
+                    items:
+                      required:
+                      - id
+                      - included_groups
+                      - title
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                        included_groups:
+                          type: array
+                          items:
+                            required:
+                            - id
+                            - title
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              title:
+                                type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                  - id: d1ae629d-143d-11eb-8071-04d4c44bd374
+                    title: Шампуни
+                  - id: ae6d1022-143e-11eb-8071-04d4c44bd374
+                    title: Кондиционеры
+                  - id: f668be86-144a-11eb-8071-04d4c44bd374
+                    title: Крема
+                    included_groups:
+                    - id: 31f2b19d-143e-11eb-8071-04d4c44bd374
+                      title: Крема для рук
+                    - id: 3ee62603-143e-11eb-8071-04d4c44bd374
+                      title: Крема для тела
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                - id: d1ae629d-143d-11eb-8071-04d4c44bd374
+                  title: Шампуни
+                  included_groups: null
+                - id: ae6d1022-143e-11eb-8071-04d4c44bd374
+                  title: Кондиционеры
+                  included_groups: null
+                - id: f668be86-144a-11eb-8071-04d4c44bd374
+                  title: Крема
+                  included_groups:
+                  - id: 31f2b19d-143e-11eb-8071-04d4c44bd374
+                    title: Крема для рук
+                    included_groups: null
+                  - id: 3ee62603-143e-11eb-8071-04d4c44bd374
+                    title: Крема для тела
+                    included_groups: null
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/contact_information/{salon_id}:
+    get:
+      tags:
+      - Онлайн-магазин
+      summary: Получить контатную информацию
+      operationId: Получить контатную информацию
+      parameters:
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      contact_information:
+                        type: array
+                        items:
+                          required:
+                          - title
+                          - type
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            title:
+                              type: string
+                      work_schedule:
+                        type: string
+                      pictures:
+                        type: array
+                        items:
+                          type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                    id: fa48036f-ef90-11e6-a7df-0050568b5c8d
+                    name: Салон красоты SpaExtreme
+                    contact_information:
+                    - type: Телефон
+                      title: +7 (495) 1111111
+                    - type: Email
+                      title: example@gmail.com
+                    - type: Фактический адрес
+                      title: "Алтай респ, Турочакский р-н, Турочак, Коммунистическ\
+                        ая 10, 56"
+                    - type: Короткий адрес
+                      title: "Турочак, Коммунистическая 10, 56"
+                    - type: Сайт
+                      title: https://example.ru
+                    work_schedule: "Пн: 09:30-18:00 Вт-Пт: 08:00-22:00 Сб,Вс: 10:00-22:00\
+                      \ Праздничные дни: 10:00-14:00"
+                    pictures:
+                    - http://192.168.8.122:8085/RepeaterSalon/hs/api/files/30a6b5df-e2f4-4970-aac7-d5962ac2d74e/508c17b0-1cec-11eb-8071-04d4c44bd374
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                  id: fa48036f-ef90-11e6-a7df-0050568b5c8d
+                  name: Салон красоты SpaExtreme
+                  contact_information:
+                  - type: Телефон
+                    title: +7 (495) 1111111
+                  - type: Email
+                    title: example@gmail.com
+                  - type: Фактический адрес
+                    title: "Алтай респ, Турочакский р-н, Турочак, Коммунистическая\
+                      \ 10, 56"
+                  - type: Короткий адрес
+                    title: "Турочак, Коммунистическая 10, 56"
+                  - type: Сайт
+                    title: https://example.ru
+                  work_schedule: "Пн: 09:30-18:00 Вт-Пт: 08:00-22:00 Сб,Вс: 10:00-22:00\
+                    \ Праздничные дни: 10:00-14:00"
+                  pictures:
+                  - http://192.168.8.122:8085/RepeaterSalon/hs/api/files/30a6b5df-e2f4-4970-aac7-d5962ac2d74e/508c17b0-1cec-11eb-8071-04d4c44bd374
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/public_offer/{salon_id}:
+    get:
+      tags:
+      - Онлайн-магазин
+      summary: Публичная оферта
+      operationId: Публичная оферта
+      parameters:
+      - name: apikey
+        in: header
+        description: e.g. 110132e6-ba129-4120-ac33-fcd612380121
+        schema:
+          type: string
+        example: 110132e6-ba129-4120-ac33-fcd612380121
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html:
+              example: |
+                {
+
+                }
+  /hs/api/v1/order_list/{salon_id}/:
+    get:
+      tags:
+      - Онлайн-магазин
+      summary: История заказов
+      operationId: История заказов
+      parameters:
+      - name: start_date
+        in: query
+        description: Дата в формате iso8601. Начало периода.
+        schema:
+          type: string
+        example: 20210119T0000
+      - name: end_date
+        in: query
+        description: Дата в формате iso8601. Окончание периода.
+        schema:
+          type: string
+        example: 20210119T0000
+      - name: page_count
+        in: query
+        description: "Количество единиц заказов, которые необходимо получить."
+        schema:
+          type: string
+      - name: page_number
+        in: query
+        description: Номер страницы с которой начинать счет.
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: УИД статуса заказа.
+        schema:
+          type: string
+      - name: order_number
+        in: query
+        description: номер заказа.
+        schema:
+          type: string
+      - name: order_id
+        in: query
+        description: УИД заказа.
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      - name: usertoken
+        in: header
+        description: e.g. 7e8245d1-574f-4ce8-88ec-7e34358df45
+        schema:
+          type: string
+        example: 7e8245d1-574f-4ce8-88ec-7e34358df45
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      order_list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            number:
+                              type: string
+                            date:
+                              type: string
+                            status:
+                              type: string
+                            status_id:
+                              type: string
+                            comment:
+                              type: string
+                            purchase_list:
+                              type: array
+                              items:
+                                required:
+                                - count
+                                - discount_sum
+                                - payment_sum
+                                - pictures
+                                - price
+                                - price_with_discount
+                                - title
+                                - type
+                                - unit
+                                type: object
+                                properties:
+                                  title:
+                                    type: string
+                                  type:
+                                    type: string
+                                  unit:
+                                    type: string
+                                  count:
+                                    type: number
+                                  price:
+                                    type: number
+                                  price_with_discount:
+                                    type: number
+                                  discount_sum:
+                                    type: number
+                                  payment_sum:
+                                    type: number
+                                  pictures:
+                                    type: array
+                                    items:
+                                      type: object
+                            order_price:
+                              type: number
+                            order_discount:
+                              type: number
+                            order_with_discount:
+                              type: number
+                      navigation:
+                        type: object
+                        properties:
+                          current_page:
+                            type: number
+                          total_page:
+                            type: number
+                          contains_count:
+                            type: number
+                          total_count:
+                            type: number
+                          page_number:
+                            type: number
+                          page_count:
+                            type: number
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                    order_list:
+                    - id: c9726d0f-4689-11eb-8075-04d4c44bd374
+                      number: "00000000002"
+                      date: 2020-12-25T12:07:27
+                      status: Открыт
+                      status_id: c9726d0f-4689-11eb-8075-04d4c44bd312
+                      comment: ""
+                      purchase_list:
+                      - title: 40002 Toss The Garter
+                        type: product
+                        unit: мл
+                        count: 3
+                        price: 500
+                        price_with_discount: 450
+                        discount_sum: 150
+                        payment_sum: 1350
+                        pictures: []
+                      - title: 40001 Haute Red
+                        type: product
+                        unit: мл
+                        count: 3
+                        price: 1000
+                        price_with_discount: 900
+                        discount_sum: 300
+                        payment_sum: 2700
+                        pictures: []
+                      order_price: 4500
+                      order_discount: 450
+                      order_with_discount: 4050
+                    navigation:
+                      current_page: 1
+                      total_page: 1
+                      contains_count: 1
+                      total_count: 1
+                      page_number: 1
+                      page_count: 20
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                  order_list:
+                  - id: c9726d0f-4689-11eb-8075-04d4c44bd374
+                    number: "00000000002"
+                    shipment_date: null
+                    date: 2020-12-25T12:07:27
+                    status: Открыт
+                    status_id: c9726d0f-4689-11eb-8075-04d4c44bd312
+                    comment: ""
+                    purchase_list:
+                    - title: 40002 Toss The Garter
+                      type: product
+                      unit: мл
+                      count: 3
+                      price: 500
+                      price_with_discount: 450
+                      discount_sum: 150
+                      payment_sum: 1350
+                      pictures: []
+                    - title: 40001 Haute Red
+                      type: product
+                      unit: мл
+                      count: 3
+                      price: 1000
+                      price_with_discount: 900
+                      discount_sum: 300
+                      payment_sum: 2700
+                      pictures: []
+                    order_price: 4500
+                    order_discount: 450
+                    order_with_discount: 4050
+                  navigation:
+                    current_page: 1
+                    total_page: 1
+                    contains_count: 1
+                    total_count: 1
+                    page_number: 1
+                    page_count: 20
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/order_status_list/{salon_id}:
+    get:
+      tags:
+      - Онлайн-магазин
+      summary: Получить статусы заказов
+      operationId: Получить статусы заказов
+      parameters:
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: array
+                    items:
+                      required:
+                      - id
+                      - title
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                  - id: fa182ee7-807b-11e9-8993-2c4d546554cd
+                    title: В работе
+                  - id: fa182ee8-807b-11e9-8993-2c4d546554cd
+                    title: Выполнен
+                  - id: fa182ee9-807b-11e9-8993-2c4d546554cd
+                    title: Завершен
+                  - id: fa182eea-807b-11e9-8993-2c4d546554cd
+                    title: Открыт
+                  - id: 145747a9-8215-11e9-8993-2c4d546554cd
+                    title: Отменен
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                - id: fa182ee7-807b-11e9-8993-2c4d546554cd
+                  title: В работе
+                - id: fa182ee8-807b-11e9-8993-2c4d546554cd
+                  title: Выполнен
+                - id: fa182ee9-807b-11e9-8993-2c4d546554cd
+                  title: Завершен
+                - id: fa182eea-807b-11e9-8993-2c4d546554cd
+                  title: Открыт
+                - id: 145747a9-8215-11e9-8993-2c4d546554cd
+                  title: Отменен
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/deposit_detail/{salon_id}/:
+    get:
+      tags:
+      - Онлайн-магазин
+      summary: Получить расшифровку движений средств на лицевом или бонусном счете
+      operationId: Получить расшифровку движений средств на лицевом или бонусном счете
+      parameters:
+      - name: deposit_id
+        in: query
+        description: ID лицевого или бонусного счета.
+        required: true
+        schema:
+          type: string
+      - name: page_count
+        in: query
+        description: "Количество движений по счету, которые необходимо получить."
+        schema:
+          type: string
+      - name: page_number
+        in: query
+        description: Номер страницы с которой начинать счет.
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      deposit_detail:
+                        type: array
+                        items:
+                          required:
+                          - cost
+                          - date
+                          - id
+                          - operation
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            date:
+                              type: string
+                            operation:
+                              type: string
+                            cost:
+                              type: number
+                      navigation:
+                        type: object
+                        properties:
+                          current_page:
+                            type: number
+                          contains_count:
+                            type: number
+                          total_page:
+                            type: number
+                          total_count:
+                            type: number
+                          page_number:
+                            type: number
+                          page_count:
+                            type: number
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                    deposit_detail:
+                    - id: ac473e61-96e4-11eb-807e-04d4c44bd374
+                      date: 2021-04-06 17:28
+                      operation: Взнос
+                      cost: 200
+                    - id: 997da790-8bf5-11eb-807c-04d4c44bd374
+                      date: 2021-03-23 18:34
+                      operation: Списание
+                      cost: -15
+                    - id: fb727b07-7a61-11eb-807c-04d4c44bd374
+                      date: 2021-03-01 10:44
+                      operation: Списание
+                      cost: -10
+                    - id: c2e2ae16-7a61-11eb-807c-04d4c44bd374
+                      date: 2021-03-01 10:43
+                      operation: Списание
+                      cost: -10
+                    - id: 2fef4589-7a5e-11eb-807c-04d4c44bd374
+                      date: 2021-03-01 10:17
+                      operation: Списание
+                      cost: -10
+                    navigation:
+                      current_page: 1
+                      contains_count: 5
+                      total_page: 9
+                      total_count: 44
+                      page_number: 1
+                      page_count: 5
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                  deposit_detail:
+                  - id: ac473e61-96e4-11eb-807e-04d4c44bd374
+                    date: 2021-04-06 17:28
+                    operation: Взнос
+                    cost: 200
+                  - id: 997da790-8bf5-11eb-807c-04d4c44bd374
+                    date: 2021-03-23 18:34
+                    operation: Списание
+                    cost: -15
+                  - id: fb727b07-7a61-11eb-807c-04d4c44bd374
+                    date: 2021-03-01 10:44
+                    operation: Списание
+                    cost: -10
+                  - id: c2e2ae16-7a61-11eb-807c-04d4c44bd374
+                    date: 2021-03-01 10:43
+                    operation: Списание
+                    cost: -10
+                  - id: 2fef4589-7a5e-11eb-807c-04d4c44bd374
+                    date: 2021-03-01 10:17
+                    operation: Списание
+                    cost: -10
+                  navigation:
+                    current_page: 1
+                    contains_count: 5
+                    total_page: 9
+                    total_count: 44
+                    page_number: 1
+                    page_count: 5
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/delivery_list/{salon_id}:
+    get:
+      tags:
+      - Онлайн-магазин
+      summary: Получить список услуг по доставке
+      operationId: Получить список услуг по доставке
+      parameters:
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: array
+                    items:
+                      required:
+                      - checked
+                      - code
+                      - price
+                      - title
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        price:
+                          type: number
+                        code:
+                          type: string
+                        checked:
+                          type: boolean
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                  - title: "Самовывоз (забрать в салоне по адресу: Москва, шоссейн\
+                      ая 10, 56) БЕСПЛАТНО"
+                    price: 0
+                    code: pickup
+                    checked: true
+                  - id: 30238c7b-c530-11eb-8086-04d4c44bd374
+                    title: Доставка курьером в пределах МКАД 300 руб.
+                    price: 300
+                    code: courier
+                    checked: false
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                - id: null
+                  title: "Самовывоз (забрать в салоне по адресу: Москва, шоссейная\
+                    \ 10, 56) БЕСПЛАТНО"
+                  price: 0
+                  code: pickup
+                  checked: true
+                - id: 30238c7b-c530-11eb-8086-04d4c44bd374
+                  title: Доставка курьером в пределах МКАД 300 руб.
+                  price: 300
+                  code: courier
+                  checked: false
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v1/filter_list/{salon_id}:
+    get:
+      tags:
+      - Онлайн-магазин
+      summary: Получить список фильтров по товарам
+      operationId: Получить список фильтров по товарам
+      parameters:
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: array
+                    items:
+                      required:
+                      - id
+                      - title
+                      - values
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                        values:
+                          type: array
+                          items:
+                            required:
+                            - id
+                            - title
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              title:
+                                type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                  - id: 31ab6a0c-44fd-11eb-8074-04d4c44bd374
+                    title: Цвет товара
+                    values:
+                    - id: 4e0698d1-44fd-11eb-8074-04d4c44bd374
+                      title: Красный
+                    - id: 34b38a47-d59a-11eb-8087-04d4c44bd374
+                      title: Синий
+                  - id: price
+                    title: Цена
+                    values:
+                    - id: from
+                      title: ""
+                    - id: to
+                      title: ""
+                  - id: tags
+                    title: Теги
+                    values:
+                    - id: 8d6d4b47-c509-11eb-8086-04d4c44bd374
+                      title: Новинка
+                    - id: ef26281a-c831-11eb-8086-04d4c44bd374
+                      title: Скидка
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                - id: 31ab6a0c-44fd-11eb-8074-04d4c44bd374
+                  title: Цвет товара
+                  values:
+                  - id: 4e0698d1-44fd-11eb-8074-04d4c44bd374
+                    title: Красный
+                  - id: 34b38a47-d59a-11eb-8087-04d4c44bd374
+                    title: Синий
+                - id: price
+                  title: Цена
+                  values:
+                  - id: from
+                    title: ""
+                  - id: to
+                    title: ""
+                - id: tags
+                  title: Теги
+                  values:
+                  - id: 8d6d4b47-c509-11eb-8086-04d4c44bd374
+                    title: Новинка
+                  - id: ef26281a-c831-11eb-8086-04d4c44bd374
+                    title: Скидка
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v2/book_staff/:
+    get:
+      tags:
+      - Терминал самообслуживания
+      summary: Получить список доступных для записи сотрудников
+      operationId: Получить список доступных для записи сотрудников
+      parameters:
+      - name: datetime
+        in: query
+        description: "Дата в формате iso8601. Будут выведены сотрудники, которые р\
+          аботают в указанный день. По умолчанию - на сегодняшний день."
+        schema:
+          type: string
+        example: 20170820T0000
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        specialization_name:
+                          type: string
+                        employee_name:
+                          type: string
+                        image:
+                          type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                  - id: e6c1b1fa-0571-11e7-a42a-0050568b5c8d
+                    specialization_name: 5_Мастер по роговому покрову на конце пальцев
+                    employee_name: Крупко Елена Федоровна
+                    image: http://192.168.8.122:8085/Salon3/hs/api/files/5c55ccbd-cf1a-471a-9426-7fa9710c0e6e/e6c1b1fa-0571-11e7-a42a-0050568b5c8d-25817.jpeg
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                - id: e6c1b1fa-0571-11e7-a42a-0050568b5c8d
+                  specialization_name: 5_Мастер по роговому покрову на конце пальцев
+                  employee_name: Крупко Елена Федоровна
+                  image: http://192.168.8.122:8085/Salon3/hs/api/files/5c55ccbd-cf1a-471a-9426-7fa9710c0e6e/e6c1b1fa-0571-11e7-a42a-0050568b5c8d-25817.jpeg
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v2/book_services/:
+    get:
+      tags:
+      - Терминал самообслуживания
+      summary: Получить список доступных для бронирования услуг
+      operationId: Получить список доступных для бронирования услуг
+      parameters:
+      - name: staff_id
+        in: query
+        description: ID сотрудника
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                        category_name:
+                          type: string
+                        price:
+                          type: number
+                        image:
+                          type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                  - id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                    title: Гидромассаж
+                    category_name: Косметология
+                    price: 2300
+                    image: http://192.168.8.122:8085/Salon3/hs/api/files/5c55ccbd-cf1a-471a-9426-7fa9710c0e6e/f3d08965-c757-11ee-80eb-04d4c44bd374
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                - id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                  title: Гидромассаж
+                  category_name: Косметология
+                  price: 2300
+                  image: http://192.168.8.122:8085/Salon3/hs/api/files/5c55ccbd-cf1a-471a-9426-7fa9710c0e6e/f3d08965-c757-11ee-80eb-04d4c44bd374
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v2/find_client_by_phone/:
+    get:
+      tags:
+      - Терминал самообслуживания
+      summary: Найти клиента по номеру телефона
+      operationId: Найти клиента по номеру телефона
+      parameters:
+      - name: phone
+        in: query
+        description: Номер телефона клиента
+        required: true
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      client_found:
+                        type: boolean
+                      client_data:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          phone:
+                            type: string
+                          last_name:
+                            type: string
+                          name:
+                            type: string
+                          second_name:
+                            type: string
+                          usertoken:
+                            type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                    client_found: true
+                    client_data:
+                      id: bcade0eb-ebea-11ec-80a3-04d4c44bd374
+                      phone: "79882843969"
+                      last_name: ""
+                      name: Анна
+                      second_name: ""
+                      usertoken: 0E4878891AFE6ED9A31C736B1F9DECCE
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                  client_found: true
+                  client_data:
+                    id: bcade0eb-ebea-11ec-80a3-04d4c44bd374
+                    phone: "79882843969"
+                    last_name: ""
+                    name: Анна
+                    second_name: ""
+                    usertoken: 0E4878891AFE6ED9A31C736B1F9DECCE
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v2/auth:
+    post:
+      tags:
+      - Терминал самообслуживания
+      summary: Авторизоваться
+      operationId: Авторизоваться
+      parameters:
+      - name: apikey
+        in: header
+        description: e.g. 147556
+        schema:
+          type: string
+        example: "147556"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - phone
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: Номер телефона клиента.
+                name:
+                  type: string
+                  description: Имя клиента.
+                birthday:
+                  type: string
+                  description: "Дата рождения в формате: \"31.12.1990\"."
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      UserToken:
+                        type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                    UserToken: 9040A083D15FFF777A695EB266903EA5
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                  UserToken: 9040A083D15FFF777A695EB266903EA5
+                errors:
+                  code: 0
+                  message: ""
+      x-codegen-request-body-name: body
+  /hs/api/v2/cart_cost/:
+    get:
+      tags:
+      - Терминал самообслуживания
+      summary: Получить стоимость корзины
+      operationId: Получить стоимость корзины
+      parameters:
+      - name: cart
+        in: query
+        description: |-
+          Строка json с массивом объектов. Пример такой строки: [{"purchase_id": "e21cf6d4-5a57-11e7-82e7-0050568b5c8d","staff_id": "e6c1b1fa-0571-11e7-a42a-0050568b5c8d"}]
+
+          <ul>
+              <li> purchase_id (required) - Идентификатор номенклатуры </li>
+              <li> staff_id (required) - Идентификатор сотрудника </li>
+          </ul>
+        required: true
+        schema:
+          type: string
+      - name: payment_list
+        in: query
+        description: "Строка json с объектом предварительных оплат.\n\n<ul> \n   \
+          \ <li> type (required) - Тип оплаты (\"cash\" - оплата наличными, \"card\"\
+          \ - оплата картой, \"bonus\" - оплата с бонусного счета) </li>\n    <li>\
+          \ amount (required) - Сумма оплаты </li>\n    <li> id (optional) - Идент\
+          ификатор бонусного счета (необходимо передавать только при оплате с бону\
+          сного счета) </li>\n</ul>"
+        schema:
+          type: string
+      - name: promocode
+        in: query
+        description: Применяемый промокод.
+        schema:
+          type: string
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      - name: usertoken
+        in: header
+        description: e.g. 7e8245d1-574f-4ce8-88ec-7e34358df45
+        schema:
+          type: string
+        example: 7e8245d1-574f-4ce8-88ec-7e34358df45
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      cart:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            purchase:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                title:
+                                  type: string
+                                type:
+                                  type: string
+                                description:
+                                  type: string
+                                pictures:
+                                  type: array
+                                  items:
+                                    type: string
+                            count:
+                              type: number
+                            price_type:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                title:
+                                  type: string
+                            price:
+                              type: number
+                            nds:
+                              type: number
+                            nds_sum:
+                              type: number
+                            price_with_discount:
+                              type: number
+                            discount_sum:
+                              type: number
+                            payment_amount:
+                              type: number
+                            payment_object:
+                              type: string
+                            payment_method:
+                              type: string
+                      total_amount:
+                        type: number
+                      total_discount:
+                        type: number
+                      may_be_payment:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            title:
+                              type: string
+                            type:
+                              type: string
+                            payment_amount:
+                              type: number
+                      promotions:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            title:
+                              type: string
+                            amount:
+                              type: number
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                    cart:
+                    - purchase:
+                        id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                        title: Гидромассаж
+                        type: service
+                        description: ""
+                        pictures:
+                        - http://192.168.8.122:8085/Salon3/hs/api/files/5c55ccbd-cf1a-471a-9426-7fa9710c0e6e/f3d08965-c757-11ee-80eb-04d4c44bd374
+                      count: 1
+                      price_type:
+                        id: fa48036e-ef90-11e6-a7df-0050568b5c8d
+                        title: Розничная цена
+                      price: 2336
+                      nds: 1
+                      nds_sum: 0
+                      price_with_discount: 2236
+                      discount_sum: 100
+                      payment_amount: 2236
+                      payment_object: service
+                      payment_method: full_payment
+                    total_amount: 2236
+                    total_discount: 100
+                    may_be_payment:
+                    - id: 22a871af-c9fa-11ee-80ec-04d4c44bd374
+                      title: Бонусы
+                      type: bonus
+                      payment_amount: 2236
+                    promotions:
+                    - type: bonus
+                      title: ""
+                      amount: 100
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                  cart:
+                  - purchase:
+                      id: e21cf6d4-5a57-11e7-82e7-0050568b5c8d
+                      title: Гидромассаж
+                      type: service
+                      description: ""
+                      pictures:
+                      - http://192.168.8.122:8085/Salon3/hs/api/files/5c55ccbd-cf1a-471a-9426-7fa9710c0e6e/f3d08965-c757-11ee-80eb-04d4c44bd374
+                    count: 1
+                    price_type:
+                      id: fa48036e-ef90-11e6-a7df-0050568b5c8d
+                      title: Розничная цена
+                    price: 2336
+                    nds: 1
+                    nds_sum: 0
+                    price_with_discount: 2236
+                    discount_sum: 100
+                    payment_amount: 2236
+                    payment_object: service
+                    payment_method: full_payment
+                  total_amount: 2236
+                  total_discount: 100
+                  may_be_payment:
+                  - id: 22a871af-c9fa-11ee-80ec-04d4c44bd374
+                    title: Бонусы
+                    type: bonus
+                    payment_amount: 2236
+                  promotions:
+                  - type: bonus
+                    title: ""
+                    amount: 100
+                errors:
+                  code: 0
+                  message: ""
+  /hs/api/v2/payment:
+    post:
+      tags:
+      - Терминал самообслуживания
+      summary: Оплатить покупки
+      operationId: Оплатить покупки
+      parameters:
+      - name: apikey
+        in: header
+        description: e.g. 409265d1-a0af-4ce8-88ec-7e3435024111
+        schema:
+          type: string
+        example: 409265d1-a0af-4ce8-88ec-7e3435024111
+      - name: usertoken
+        in: header
+        description: e.g. 7e8245d1-574f-4ce8-88ec-7e34358df45
+        schema:
+          type: string
+        example: 7e8245d1-574f-4ce8-88ec-7e34358df45
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - cart
+              - payment_list
+              - receipt_number
+              - transaction_id
+              type: object
+              properties:
+                transaction_id:
+                  type: string
+                  description: Идентификатор транзакции
+                receipt_number:
+                  type: string
+                  description: Номер чека ККМ
+                cart:
+                  $ref: '#/components/schemas/cart'
+                payment_list:
+                  $ref: '#/components/schemas/PaymentList'
+                promocode:
+                  type: string
+                  description: Промокод
+        required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      result:
+                        type: boolean
+                      record_id:
+                        type: string
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      message:
+                        type: string
+                example:
+                  parameters:
+                    result: true
+                    record_id: 22a871af-c9fa-11ee-80ec-04d4c44bd374
+                  errors:
+                    code: 0
+                    message: ""
+              example:
+                parameters:
+                  result: true
+                  record_id: 22a871af-c9fa-11ee-80ec-04d4c44bd374
+                errors:
+                  code: 0
+                  message: ""
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    cart:
+      required:
+      - purchase_id
+      type: object
+      properties:
+        purchase_id:
+          type: string
+          description: Идентификатор номенклатуры
+        count:
+          type: number
+          description: Количество номенклатуры. Необходимо передавать в онлайн магазине
+        staff_id:
+          type: string
+          description: Идентификатор сотрудника. Необходимо передавать в терминалах
+            самообслуживания.
+    Payment:
+      required:
+      - card
+      - cash
+      - deposit
+      type: object
+      properties:
+        cash:
+          type: number
+          description: Сумма оплаты наличными
+        card:
+          type: number
+          description: Сумма оплаты картой
+        deposit:
+          type: number
+          description: Сумма оплаты лицевым счетом
+    PaymentList:
+      required:
+      - amount
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: "Тип оплаты (\"cash\" - оплата наличными, \"card\" - оплата\
+            \ картой, \"deposit\" - оплата с лицевого счета, \"bonus\" - оплата с\
+            \ бонусного счета)"
+        amount:
+          type: number
+          description: Сумма оплаты
+        id:
+          type: string
+          description: Идентификатор лицевого счета (необходимо передавать только
+            при оплате с лицевого/бонусного счета)
+    Record:
+      required:
+      - datetime
+      - service_id
+      type: object
+      properties:
+        datetime:
+          type: string
+          description: Дата в формате iso8601. Дата и время занятия
+        service_id:
+          type: string
+          description: Идентификатор услуги
+        staff_id:
+          type: string
+          description: "Идентификатор сотрудника. Если не передан, то в визит подс\
+            тавится любой свободный сотрудник, способный оказать услугу"
+    delivery:
+      required:
+      - id
+      - options
+      - price
+      type: object
+      properties:
+        id:
+          type: string
+          description: Идентификатор номенклатуры доставки
+        price:
+          type: number
+          description: Стоимость услуги доставки
+        options:
+          type: object
+          properties: {}
+          description: "Объект с данными ЯД, если идентификатор номенклатуры не от\
+            носится к ЯД, то должен быть null"
+    client:
+      type: object
+      properties:
+        phone:
+          type: string
+          description: "Телефон клиента. Необходим, если в заголовках не передаетс\
+            я usertoken"
+        last_name:
+          type: string
+          description: "Фамилия клиента. Требуется, если в заголовках не передаетс\
+            я usertoken"
+        name:
+          type: string
+          description: "Имя клиента. Необходимо, если в заголовках не передается usertoken"
+        second_name:
+          type: string
+          description: "Отчество клиента. Если в заголовках не передается usertoken,\
+            \ то данный параметр будет добавлен создаваемому клиенту"
+        birthday:
+          type: string
+          description: "Дата рождения в формате: \"31.12.1990\". Если в заголовках\
+            \ не передается usertoken, то данный параметр будет добавлен создаваем\
+            ому клиенту"
+    GiftTo:
+      required:
+      - phone
+      type: object
+      properties:
+        phone:
+          type: string
+          description: Телефон клиента
+        name:
+          type: string
+          description: Имя клиента
+        email:
+          type: string
+          description: Почта клиента
+    Получить доступные варианты авторизации {auth_types}:
+      type: object
+    Авторизация {auth}:
+      type: object
+    Валидность ключа пользователя {validity_usertoken}:
+      type: object
+    Авторизация с цифровой подписью {private_auth}:
+      type: object
+    Запрос на подтверджения номера телефона {auth_request}:
+      type: object
+    Токен клиента при исходящей авторизации {auth_token}:
+      type: object
+    Услуги, доступные для записи {book_services}:
+      type: object
+    Сотрудники, доступные для записи {book_staff}:
+      type: object
+    Даты, доступные для записи {book_dates}:
+      type: object
+    Слоты, доступные для записи {book_times}:
+      type: object
+    Запись на визит {book_record}:
+      type: object
+    Перенос визита {change_record}:
+      type: object
+    Отмена записи {cancel_record}:
+      type: object
+    Оконченные визиты {finished_visites}:
+      type: object
+    Список визитов {visites}:
+      type: object
+    Долговые визиты {debt_visits}:
+      type: object
+    Оплатить визит {visit_payment}:
+      type: object
+    Информация о клиенте {client}:
+      type: object
+    Лицевые и бонусные счета клиента {deposit_list}:
+      type: object
+    Обновить информацию о клиенте {update_client}:
+      type: object
+    Пополнить лицевой счет клиента {refill_deposit}:
+      type: object
+    История визитов клиента {records_history}:
+      type: object
+    Запланированные визиты клиента {records}:
+      type: object
+    Оценивание визита {record_rating}:
+      type: object
+    Оценки и комментарии клиентов {comments}:
+      type: object
+    Получение прайс-листа {price_list}:
+      type: object
+    Получить стоимость корзины с покупками {cart_cost}:
+      type: object
+    Оплатить {payment}:
+      type: object
+    Получить разделы товаров в иерархическом списке {group_list}:
+      type: object
+    Получить контактную информацию магазина {contact_information}:
+      type: object
+    Публичная оферта {public_offer}:
+      type: object
+    История заказов {order_list}:
+      type: object
+    Получить статусы заказов покупателей {order_status_list}:
+      type: object
+    Расшифровка движений на лицевом или бонусном счете {deposit_detail}:
+      type: object
+    Получить список услуг по доставке {delivery_list}:
+      type: object
+    Получить список фильтров по товарам {filter_list}:
+      type: object
+    Найти клиента по номеру телефона {find_client_by_phone}:
+      type: object
+x-original-swagger-version: "2.0"
